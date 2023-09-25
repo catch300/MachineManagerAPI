@@ -1,12 +1,25 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Domain.Repositories;
+using Microsoft.AspNetCore.Mvc;
 
-namespace MachineManagerAPI.Controllers
+
+namespace WebApi.Controllers
 {
+    [Route("api/machines")]
+    [ApiController]
     public class MachineController : Controller
     {
-        public IActionResult Index()
+        private readonly IMachineRepository _machineRepository;
+
+        public MachineController(IMachineRepository machineRepository) => _machineRepository = machineRepository;
+
+        [HttpGet]
+        public async Task<IActionResult> GetMachines()
         {
-            return View();
+            var machines = await _machineRepository.GetMachines();
+            if (machines == null) return NotFound();
+            
+            return Ok(machines);
+
         }
     }
 }

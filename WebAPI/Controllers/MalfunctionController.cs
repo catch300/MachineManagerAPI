@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace MachineManagerAPI.Controllers
+namespace WebApi.Controllers
 {
     public class MalfunctionController : Controller
     {
