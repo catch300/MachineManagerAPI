@@ -35,14 +35,13 @@ namespace Infrastructure.Repositories
                     var machines = await connection.QueryAsync<Machine, Faults, Machine>(query,
                         (machine, fault) =>
                         {
-                            Machine machineEntry = new Machine();
-                            if (!machineDictionary.TryGetValue(machine.MachineId, out machineEntry))
+                            if (!machineDictionary.TryGetValue(machine.MachineId, out var machineEntry))
                             {
                                 machineEntry = machine;
                                 machineEntry.Faults = new List<Faults>();
-                                machineDictionary.Add(machineEntry.MachineId, machineEntry);
+                                machineDictionary.Add(machine.MachineId, machineEntry);
                             }
-                            machineEntry.Faults.Add(fault);
+                            if (fault != null) machineEntry.Faults.Add(fault);
                             return machineEntry;
                         },
                         splitOn: "MachineId");
@@ -50,7 +49,7 @@ namespace Infrastructure.Repositories
                 }
             }
 
-        public async Task<Machine> GetMachinesById(int machineId)
+        public async Task<Machine> GetMachinesByIdAsync(int machineId)
         {
             var query = @"
                         SELECT
@@ -68,27 +67,28 @@ namespace Infrastructure.Repositories
 
             using (var connection = _dbContext.CreateConnection())
             {   
-                var machineDictionary = new Dictionary<int, Machine>();
+                //var machineDictionary = new Dictionary<int, Machine>();
 
-                var machine = await connection.QueryAsync<Machine, Faults, Machine>(query,
+                Machine machineEntry = null;
+                await connection.QueryAsync<Machine, Faults, Machine>(query,
                     (machine, fault) =>
                     {
-                        Machine machineEntry = new Machine();
-                        if (!machineDictionary.TryGetValue(machine.MachineId, out machineEntry))
+                        if (machineEntry == null)
                         {
                             machineEntry = machine;
-                            machineEntry.Faults = new List<Faults>();
-                            machineDictionary.Add(machineEntry.MachineId, machineEntry);
+                            machineEntry.Faults = new List<Faults> {};
                         }
 
-                        machineEntry.Faults.Add(fault);
+                        if (fault != null) machineEntry.Faults.Add(fault);
+
                         return machineEntry;
+
                     },
                     param: new { MachineId = machineId },
                     splitOn: "MachineId"
-                    ); ;
-
-                return machine.FirstOrDefault();
+                    );
+                return machineEntry;
+                //return machineEntry.FirstOrDefault();
             }
         }
         public async Task<bool> DoesMachineExistAsync(string machineName)

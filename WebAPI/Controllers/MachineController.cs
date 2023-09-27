@@ -18,7 +18,7 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMachines()
         {
-            var machines = await _machineService.GetMachines();
+            var machines = await _machineService.GetMachinesAsnyc();
             if (machines == null) return NotFound();
 
             return Ok(machines);
@@ -28,14 +28,28 @@ namespace WebApi.Controllers
         [HttpGet("{id}", Name ="MachineById")]
         public async Task<IActionResult> GetMachinesById(int id)
         {
-            var machines = await _machineService.GetMachinesById(id);
-            if (machines == null) return NotFound("Machine with {id} does not exist!");
+            var machines = await _machineService.GetMachinesByIdAsync(id);
+            if (machines == null) return NotFound($"Machine with the id: {id} does not exist!");
 
             return Ok(machines);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddMachine([FromBody] MachineForCreationDto machine)
+        {
+            try
+            {
+                var machineId = await _machineService.InsertMachineAsync(machine);
+                return CreatedAtAction(nameof(GetMachinesById), new { id = machineId }, machine);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+        [HttpPut("{MachineId:guid}")]
+
+        public async Task<IActionResult> UpdateMachine([FromBody] MachineForCreationDto machine)
         {
             try
             {

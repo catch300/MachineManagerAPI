@@ -17,7 +17,7 @@ namespace Application.Services
             _machineRepository = machineRepository;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<MachineDetailDto>> GetMachines()
+        public async Task<IEnumerable<MachineDetailDto>> GetMachinesAsnyc()
         {
             
             var machines = await _machineRepository.GetAllMachinesAsync();
@@ -27,9 +27,9 @@ namespace Application.Services
             return machineDetails;
         }
 
-        public async Task<MachineDetailDto> GetMachinesById(int id)
+        public async Task<MachineDetailDto> GetMachinesByIdAsync(int id)
         {
-            var machine = await _machineRepository.GetMachinesById(id);
+            var machine = await _machineRepository.GetMachinesByIdAsync(id);
 
             if (machine == null)
                 return null;
