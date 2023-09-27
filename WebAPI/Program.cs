@@ -1,3 +1,5 @@
+using Application.Abstractionn;
+using Application.Services;
 using Domain.Repositories;
 using Infrastructure;
 using Infrastructure.Repositories;
@@ -12,6 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddSingleton<DbContext>();
 
 builder.Services.AddScoped<IMachineRepository, MachineRepository>();
+builder.Services.AddScoped<IFaultsRepository, FaultRepository>();
+
+builder.Services.AddScoped<IMachineService, MachineService>();
+builder.Services.AddScoped<IFaultsService, FaultsService>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

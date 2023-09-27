@@ -11,14 +11,9 @@ namespace Domain.Models
 {
     public class Machine
     {
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid Id { get; set; }
-
-        [Required(AllowEmptyStrings = false, ErrorMessage = "{0} is required field!")]
-        public required string Name { get; set; }
-
-        public required ICollection<Malfunction> Malfunctions { get; set; }
+        public int MachineId { get; set; }
+        public string Name { get; set; }
+        public List<Faults> Faults{ get; set; } = new List<Faults>();
 
     }
 }
