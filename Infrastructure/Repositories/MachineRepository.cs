@@ -90,7 +90,30 @@ namespace Infrastructure.Repositories
 
                 return machine.FirstOrDefault();
             }
+        }
+        public async Task<bool> DoesMachineExistAsync(string machineName)
+        {
+            var query = @"SELECT COUNT(*) FROM ""Machines"" WHERE ""Name"" = @Name;";
 
+            using (var connection = _dbContext.CreateConnection())
+            {
+                var count = await connection.ExecuteScalarAsync<int>(query, param: new { Name = machineName });
+                return count > 0;
+            }
+        }
+
+        public async Task<int> AddMachineAsync(Machine machine)
+        {
+            var sql = @"
+                    INSERT INTO ""Machines"" (""Name"")
+                    VALUES (@Name)
+                    RETURNING ""MachineId"";
+                ";
+            using (var connection = _dbContext.CreateConnection())
+            {
+                var machineId = await connection.ExecuteScalarAsync<int>(sql, param: new { Name = machine.Name });
+                return machineId;
+            }
         }
     }
 }

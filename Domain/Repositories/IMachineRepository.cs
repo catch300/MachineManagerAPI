@@ -11,5 +11,7 @@ namespace Domain.Repositories
     {
         public Task<IEnumerable<Machine>> GetAllMachinesAsync();
         public Task<Machine> GetMachinesById(int id);
+        public Task<bool> DoesMachineExistAsync(string machineName);
+        public Task<int> AddMachineAsync(Machine machine);
     }
 }

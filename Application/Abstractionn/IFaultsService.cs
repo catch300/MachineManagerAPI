@@ -10,6 +10,6 @@ namespace Application.Abstractionn
 {
     public interface IFaultsService
     {
-        public Task<IEnumerable<MachineDetail>> GetFaults();
+        public Task<IEnumerable<MachineDetailDto>> GetFaults();
     }
 }

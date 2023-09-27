@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Contracts
 {
-    public class MachineDetail
+    public class MachineDetailDto
     {
         public int MachineId { get; set; }
         public string MachineName { get; set; }

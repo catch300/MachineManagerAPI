@@ -1,7 +1,9 @@
 ﻿using Application.Abstractionn;
+using AutoMapper;
 using Contracts;
 using Domain.Models;
 using Domain.Repositories;
+
 
 namespace Application.Services
 {
@@ -9,42 +11,45 @@ namespace Application.Services
     {
 
         private readonly IMachineRepository _machineRepository;
-        public MachineService(IMachineRepository machineRepository) => _machineRepository = machineRepository;
-
-        public async Task<IEnumerable<MachineDetail>> GetMachines()
+        private readonly IMapper _mapper;
+        public MachineService(IMachineRepository machineRepository, IMapper mapper)
         {
+            _machineRepository = machineRepository;
+            _mapper = mapper;
+        }
+        public async Task<IEnumerable<MachineDetailDto>> GetMachines()
+        {
+            
             var machines = await _machineRepository.GetAllMachinesAsync();
 
-            var machineDetails = machines.Select(machine => new MachineDetail
-            {
-                MachineId = machine.MachineId,
-                MachineName = machine.Name,
-                FaultNames = machine.Faults != null ? machine.Faults.Select(x => x.Name).ToList() : new List<string>(),
-                AverageFaultDuration = machine.Faults != null && machine.Faults.Any()
-                                            ? machine.Faults.Average(f => (f.EndTime - f.StartTime).TotalMinutes) : 0
-            });
+            var machineDetails = _mapper.Map<IEnumerable<MachineDetailDto>>(machines);
 
             return machineDetails;
         }
 
-        public async Task<MachineDetail> GetMachinesById(int id)
+        public async Task<MachineDetailDto> GetMachinesById(int id)
         {
             var machine = await _machineRepository.GetMachinesById(id);
 
             if (machine == null)
                 return null;
 
-            var detail = new MachineDetail 
-            {
-                MachineId = machine.MachineId,
-                MachineName = machine.Name,
-                FaultNames = machine.Faults != null ? machine.Faults.Select(x => x.Name).ToList() : new List<string>(),
-                AverageFaultDuration = machine.Faults != null && machine.Faults.Any()
-                                            ? machine.Faults.Average(f => (f.EndTime - f.StartTime).TotalMinutes) : 0
-            };
+            var machineDetail= _mapper.Map<MachineDetailDto>(machine);  
             
-            return detail;
+            return machineDetail;
         }
 
+        public async Task<int> InsertMachineAsync(MachineForCreationDto machineDto)
+        {
+            var machine = _mapper.Map<Machine>(machineDto);
+
+            var doesExist = await _machineRepository.DoesMachineExistAsync(machine.Name);
+            if (doesExist)
+            {
+                throw new InvalidOperationException("Machine already exist with that name.");
+            }
+
+            return await _machineRepository.AddMachineAsync(machine);
+        }
     }
 }

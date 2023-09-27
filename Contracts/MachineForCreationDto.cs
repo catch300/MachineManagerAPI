@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Contracts
 {
-    public class MachineFault
+    public class MachineForCreationDto
     {
-        public int Id { get; set; }
+        [Required(AllowEmptyStrings = false, ErrorMessage = "{0} is required field!")]
         public string Name { get; set; }
-        public string FaultName { get; set; }
-        public double FaultDuration { get; set; }
     }
 }

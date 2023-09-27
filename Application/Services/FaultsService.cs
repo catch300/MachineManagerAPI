@@ -12,7 +12,7 @@ namespace Application.Services
 
         public FaultsService(IFaultsRepository faultsRepository) => _faultsRepository = faultsRepository;
 
-        public async Task<IEnumerable<MachineDetail>> GetFaults()
+        public async Task<IEnumerable<MachineDetailDto>> GetFaults()
         {
             //var faults =  await _faultsRepository.GetFaults();
 

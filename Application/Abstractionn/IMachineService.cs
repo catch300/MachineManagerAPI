@@ -10,7 +10,9 @@ namespace Application.Abstractionn
 {
     public interface IMachineService
     {
-        public Task<IEnumerable<MachineDetail>> GetMachines();
-        public Task<MachineDetail> GetMachinesById(int id);
+        public Task<IEnumerable<MachineDetailDto>> GetMachines();
+        public Task<MachineDetailDto> GetMachinesById(int id);
+
+        public Task<int> InsertMachineAsync(MachineForCreationDto machine);
     }
 }
