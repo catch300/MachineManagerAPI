@@ -27,6 +27,8 @@ namespace Application.Mapping
                                             : 0));
             CreateMap <IEnumerable<MachineDetailDto>, IEnumerable<Machine >> ();
             CreateMap<MachineForCreationDto, Machine>();
+            CreateMap<MachineForUpdateDto, Machine>();
+
         }
     }
 }

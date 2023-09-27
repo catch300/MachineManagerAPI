@@ -10,8 +10,10 @@ namespace Domain.Repositories
     public interface IMachineRepository
     {
         public Task<IEnumerable<Machine>> GetAllMachinesAsync();
-        public Task<Machine> GetMachinesByIdAsync(int id);
+        public Task<Machine> GetMachineByIdAsync(int id);
         public Task<bool> DoesMachineExistAsync(string machineName);
-        public Task<int> AddMachineAsync(Machine machine);
+        public Task<int> CreateMachineAsync(Machine machine);
+        public Task UpdateMachineAsync(int machineId, Machine machine);
+        public Task DeleteMachineAsync(int machineId);
     }
 }

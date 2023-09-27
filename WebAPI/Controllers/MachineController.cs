@@ -25,11 +25,11 @@ namespace WebApi.Controllers
 
         }
 
-        [HttpGet("{id}", Name ="MachineById")]
-        public async Task<IActionResult> GetMachinesById(int id)
+        [HttpGet("{machineId}")]
+        public async Task<IActionResult> GetMachineById(int machineId)
         {
-            var machines = await _machineService.GetMachinesByIdAsync(id);
-            if (machines == null) return NotFound($"Machine with the id: {id} does not exist!");
+            var machines = await _machineService.GetMachineByIdAsync(machineId);
+            if (machines == null) return NotFound($"Machine with the id: {machineId} does not exist!");
 
             return Ok(machines);
         }
@@ -39,22 +39,36 @@ namespace WebApi.Controllers
         {
             try
             {
-                var machineId = await _machineService.InsertMachineAsync(machine);
-                return CreatedAtAction(nameof(GetMachinesById), new { id = machineId }, machine);
+                var machineId = await _machineService.CreateMachineAsync(machine);
+                return CreatedAtAction(nameof(GetMachineById), new { machineId = machineId }, machine);
             }
             catch (InvalidOperationException ex)
             {
                 return BadRequest(new { error = ex.Message });
             }
         }
-        [HttpPut("{MachineId:guid}")]
 
-        public async Task<IActionResult> UpdateMachine([FromBody] MachineForCreationDto machine)
+        [HttpPut("{machineId}")]
+        public async Task<IActionResult> UpdateMachine(int machineId, [FromBody] MachineForUpdateDto machineForUpdate)
         {
             try
             {
-                var machineId = await _machineService.InsertMachineAsync(machine);
-                return CreatedAtAction(nameof(GetMachinesById), new { id = machineId }, machine);
+                await _machineService.UpdateMachineAsync(machineId, machineForUpdate);
+                return NoContent();
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { error = ex.Message });
+            }
+        }
+
+        [HttpDelete("{machineId}")]
+        public async Task<IActionResult> DeleteMachine(int machineId)
+        {
+            try
+            {
+                await _machineService.DeleteMachineAsync(machineId);
+                return NoContent();
             }
             catch (InvalidOperationException ex)
             {

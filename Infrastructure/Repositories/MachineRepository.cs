@@ -1,7 +1,7 @@
 ﻿using Dapper;
 using Domain.Models;
 using Domain.Repositories;
-using System.Text.RegularExpressions;
+using System.Data;
 
 
 namespace Infrastructure.Repositories
@@ -49,7 +49,7 @@ namespace Infrastructure.Repositories
                 }
             }
 
-        public async Task<Machine> GetMachinesByIdAsync(int machineId)
+        public async Task<Machine> GetMachineByIdAsync(int machineId)
         {
             var query = @"
                         SELECT
@@ -67,7 +67,6 @@ namespace Infrastructure.Repositories
 
             using (var connection = _dbContext.CreateConnection())
             {   
-                //var machineDictionary = new Dictionary<int, Machine>();
 
                 Machine machineEntry = null;
                 await connection.QueryAsync<Machine, Faults, Machine>(query,
@@ -88,7 +87,6 @@ namespace Infrastructure.Repositories
                     splitOn: "MachineId"
                     );
                 return machineEntry;
-                //return machineEntry.FirstOrDefault();
             }
         }
         public async Task<bool> DoesMachineExistAsync(string machineName)
@@ -102,7 +100,7 @@ namespace Infrastructure.Repositories
             }
         }
 
-        public async Task<int> AddMachineAsync(Machine machine)
+        public async Task<int> CreateMachineAsync(Machine machine)
         {
             var sql = @"
                     INSERT INTO ""Machines"" (""Name"")
@@ -113,6 +111,32 @@ namespace Infrastructure.Repositories
             {
                 var machineId = await connection.ExecuteScalarAsync<int>(sql, param: new { Name = machine.Name });
                 return machineId;
+            }
+        }
+
+        public async Task UpdateMachineAsync(int machineId, Machine machine)
+        {
+            var query = @"UPDATE ""Machines""
+	                        SET ""Name""=@Name
+	                        WHERE ""MachineId"" = @MachineId";
+            var parameters = new DynamicParameters();
+            parameters.Add("MachineId", machineId, DbType.Int32);
+            parameters.Add("Name", machine.Name, DbType.String);
+
+            using (var connection = _dbContext.CreateConnection())
+            {
+                await connection.ExecuteAsync(query, parameters);
+            }
+        }
+
+        public async Task DeleteMachineAsync(int machineId)
+        {
+            var query = @"DELETE FROM ""Machines""
+	                        WHERE ""MachineId""=@MachineId";
+            using (var connection = _dbContext.CreateConnection())
+            {
+                await connection.ExecuteAsync(query, param: new {machineId});
+
             }
         }
     }
