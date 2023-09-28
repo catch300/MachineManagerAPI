@@ -1,4 +1,5 @@
 ﻿using Application.Abstractionn;
+using AutoMapper;
 using Contracts;
 using Domain.Models;
 using Domain.Repositories;
@@ -9,43 +10,24 @@ namespace Application.Services
     public class FaultsService : IFaultsService
     {
         private readonly IFaultsRepository _faultsRepository;
-
-        public FaultsService(IFaultsRepository faultsRepository) => _faultsRepository = faultsRepository;
-
-        public async Task<IEnumerable<MachineDetailDto>> GetFaults()
+        private readonly IMapper _mapper;
+        public FaultsService(IFaultsRepository faultsRepository, IMapper mapper)
         {
-            //var faults =  await _faultsRepository.GetFaults();
-
-            //var faultsDto = MapToFaultsDTOs(faults);
-
-
-            //return faultsDto;
-            return null;
+            _faultsRepository = faultsRepository; 
+            _mapper = mapper;
         }
 
-        
-        //private static IEnumerable<FaultsDto> MapToFaultsDTOs(IEnumerable<Faults> malfunctions)
-        //{
-        //    var malfunctionDTOs = new List<FaultsDto>();
+        public async Task<IEnumerable<FaultDto>> GetAllFaultsAsync(int page, int pageSize)
+        {
+            int offset = (Math.Max(page, 1) - 1) * pageSize;
+            int limit = pageSize < 1 ? 1 : pageSize;
 
-        //    foreach (var malfunction in malfunctions)
-        //    {
-        //        var malfunctionDTO = new FaultsDto
-        //            {
-        //                FaultId = malfunction.FaultId,
-        //                Name = malfunction.Name,
-        //                Priority = malfunction.Priority,
-        //                StartTime = malfunction.StartTime,
-        //                EndTime = malfunction.EndTime,
-        //                IsResloved = malfunction.IsResloved,
-        //                Description = malfunction.Description,
-        //                MachineId = malfunction.MachineId,
-        //            };
+            var faults = await _faultsRepository.GetAllFaultsAsync(offset, limit);
 
-        //        malfunctionDTOs.Add(malfunctionDTO);
-        //    }
+            var faultsDto = _mapper.Map<IEnumerable<FaultDto>>(faults);
+            return faultsDto;
+            
+        }
 
-        //    return malfunctionDTOs;
-        //}
     }
 }

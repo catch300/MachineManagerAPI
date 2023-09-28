@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Models
+namespace Contracts
 {
-    public class Faults
+    public class FaultDto
     {
         public int FaultId { get; set; }
         public required string Name { get; set; }

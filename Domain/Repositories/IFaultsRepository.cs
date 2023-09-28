@@ -9,6 +9,7 @@ namespace Domain.Repositories
 {
     public interface IFaultsRepository
     {
-        public Task<IEnumerable<Faults>> GetFaults();
+        public Task<IEnumerable<Faults>> GetAllFaultsAsync(int offset, int limit);
+        public Task<int> CountAllFaults();
     }
 }

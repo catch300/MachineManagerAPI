@@ -13,21 +13,23 @@ namespace Application.Mapping
     {
         public MappingProfile() 
         {
-            //CreateMap<MachineDetailDto, Machine>();
             CreateMap<Machine, MachineDetailDto>()
                     .ForMember(dest => dest.MachineId, opt => opt.MapFrom(src => src.MachineId))
                     .ForMember(dest => dest.MachineName, opt => opt.MapFrom(src => src.Name))
                     .ForMember(dest => dest.FaultNames,
-                        opt => opt.MapFrom(src => src.Faults != null
-                                            ? src.Faults.Where(f => f != null && f.Name != null).Select(f => f.Name).ToList()
-                                            : new List<string>()))
+                                opt => opt.MapFrom(src => src.Faults != null
+                                                    ? src.Faults.Where(f => f != null && f.Name != null).Select(f => f.Name).ToList()
+                                                    : new List<string>()))
                     .ForMember(dest => dest.AverageFaultDuration,
-                        opt => opt.MapFrom(src => src.Faults != null && src.Faults.Any()
-                                            ? src.Faults.Average(f => (f.EndTime - f.StartTime).TotalMinutes)
-                                            : 0));
+                                opt => opt.MapFrom(src => src.Faults != null && src.Faults.Any()
+                                                    ? src.Faults.Average(f => (f.EndTime - f.StartTime).TotalMinutes)
+                                                    : 0));
             CreateMap <IEnumerable<MachineDetailDto>, IEnumerable<Machine >> ();
             CreateMap<MachineForCreationDto, Machine>();
             CreateMap<MachineForUpdateDto, Machine>();
+
+            CreateMap<Faults, FaultDto>().ReverseMap();
+
 
         }
     }
