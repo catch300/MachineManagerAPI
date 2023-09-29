@@ -1,4 +1,4 @@
-﻿using Application.Abstractionn;
+﻿using Application.Abstraction;
 using AutoMapper;
 using Contracts;
 using Domain.Models;
@@ -17,15 +17,24 @@ namespace Application.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<FaultDto>> GetAllFaultsAsync(int page, int pageSize)
+        public async Task<IPaginatedList<IEnumerable<FaultDto>>> GetAllFaultsAsync(int currentPageNumber, int pageSize)
         {
-            int offset = (Math.Max(page, 1) - 1) * pageSize;
-            int limit = pageSize < 1 ? 1 : pageSize;
+            currentPageNumber = currentPageNumber < 1 ? 1 : currentPageNumber;
 
-            var faults = await _faultsRepository.GetAllFaultsAsync(offset, limit);
+            var totalNumOfFaults = await _faultsRepository.CountAllFaults();
 
+            int maxPageSize = 10;
+            pageSize = pageSize < maxPageSize ? pageSize : maxPageSize;
+            pageSize = pageSize < 1 ? totalNumOfFaults : pageSize;
+
+            int offset = (currentPageNumber - 1) * pageSize;
+
+            var faults = await _faultsRepository.GetAllFaultsAsync(offset, pageSize);
             var faultsDto = _mapper.Map<IEnumerable<FaultDto>>(faults);
-            return faultsDto;
+
+            IPaginatedList<IEnumerable<FaultDto>> result = new PaginatedList<IEnumerable<FaultDto>>(totalNumOfFaults, faultsDto, currentPageNumber, pageSize);
+
+            return result;
             
         }
 

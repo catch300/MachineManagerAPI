@@ -1,4 +1,4 @@
-﻿using Application.Abstractionn;
+﻿using Application.Abstraction;
 using Contracts;
 using Domain.Repositories;
 using Infrastructure.Repositories;

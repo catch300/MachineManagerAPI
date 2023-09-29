@@ -6,10 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Abstractionn
+namespace Application.Abstraction
 {
     public interface IFaultsService
     {
-        public Task<IEnumerable<FaultDto>> GetAllFaultsAsync(int currentPageNumber, int pageSize);
+        public Task<IPaginatedList<IEnumerable<FaultDto>>> GetAllFaultsAsync(int currentPageNumber, int pageSize);
     }
 }

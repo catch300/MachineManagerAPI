@@ -1,4 +1,4 @@
-﻿using Application.Abstractionn;
+﻿using Application.Abstraction;
 using AutoMapper;
 using Contracts;
 using Domain.Models;

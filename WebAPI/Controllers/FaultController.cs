@@ -1,4 +1,6 @@
-﻿using Application.Abstractionn;
+﻿using Application.Abstraction;
+using Application.Services;
+using Contracts;
 using Domain.Models;
 using Domain.Repositories;
 using Infrastructure.Repositories;
@@ -16,11 +18,8 @@ namespace WebApi.Controllers
         public FaultController(IFaultsService faultsService) => _faultsService = faultsService;
 
         [HttpGet]
-        public async Task<IActionResult> GetMalfunctions(int currentPageNumber, int pageSize)
+        public async Task<IActionResult> GetFaults(int currentPageNumber, int pageSize)
         {
-            currentPageNumber = (Math.Max(currentPageNumber, 1) - 1) * pageSize;
-            pageSize = pageSize < 1 ? 1 : pageSize;
-
             var malfunctions = await _faultsService.GetAllFaultsAsync(currentPageNumber, pageSize);
             if (malfunctions == null) return NotFound();
             

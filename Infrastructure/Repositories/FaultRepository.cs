@@ -1,7 +1,6 @@
 ﻿using Dapper;
 using Domain.Models;
 using Domain.Repositories;
-using Infrastructure.Repositories.Pagination;
 
 namespace Infrastructure.Repositories
 {
@@ -13,7 +12,7 @@ namespace Infrastructure.Repositories
 
         public async Task<int> CountAllFaults()
         {
-            var query = @"SELECT COUNT(*) FROM ""FAULTS"" ";
+            var query = @"SELECT COUNT(*) FROM ""Faults"" ";
 
             using (var connection = _dbContext.CreateConnection())
             {
@@ -32,14 +31,16 @@ namespace Infrastructure.Repositories
                                  WHEN ""Priority"" = 'High' THEN 3 
                             END ASC, 
                             ""StartTime"" DESC 
-                        OFFSET @Offset LIMIT @Limit";
+                            OFFSET @Offset ROWS
+                            FETCH NEXT @Limit ROWS ONLY";
+//                        OFFSET @Offset ROWS
+//                        LIMIT @Limit";
 
             using (var connection = _dbContext.CreateConnection())
             {
                 var faults = await connection.QueryAsync<Faults>(query, param: new { Offset = offset, Limit = limit });
 
                 return faults;
-                //return await _db.QueryAsync<Faults>(sql, new { Offset = offset, Limit = limit });
             }
         }
     }
