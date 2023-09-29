@@ -102,14 +102,14 @@ namespace Infrastructure.Repositories
 
         public async Task<int> CreateMachineAsync(Machine machine)
         {
-            var sql = @"
+            var query = @"
                     INSERT INTO ""Machines"" (""Name"")
                     VALUES (@Name)
                     RETURNING ""MachineId"";
                 ";
             using (var connection = _dbContext.CreateConnection())
             {
-                var machineId = await connection.ExecuteScalarAsync<int>(sql, param: new { Name = machine.Name });
+                var machineId = await connection.ExecuteScalarAsync<int>(query, param: new { Name = machine.Name });
                 return machineId;
             }
         }

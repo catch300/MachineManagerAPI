@@ -1,4 +1,4 @@
-﻿using Contracts;
+﻿using Contracts.Machines;
 using Domain.Models;
 using System;
 using System.Collections.Generic;

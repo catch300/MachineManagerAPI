@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Models
+namespace Contracts.Faults
 {
-    public class Faults
+    public class FaultDto
     {
         public int FaultId { get; set; }
         public required string Name { get; set; }
@@ -17,4 +17,5 @@ namespace Domain.Models
         public bool IsResolved { get; set; }
         public int MachineId { get; set; }
     }
+
 }

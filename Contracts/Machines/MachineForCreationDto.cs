@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Contracts
+namespace Contracts.Machines
 {
-    public class MachineForUpdateDto
+    public class MachineForCreationDto
     {
-        [Required(AllowEmptyStrings = false, ErrorMessage = "{0} is required field!")]
+        [Required(AllowEmptyStrings = false, ErrorMessage = "Field '{0}' must not be empty!")]
         public string Name { get; set; }
     }
 }

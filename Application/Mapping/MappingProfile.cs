@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Contracts;
 using Domain.Models;
 using Application.Abstraction;
 using System;
@@ -7,6 +6,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Contracts.Faults;
+using Contracts.Machines;
 
 namespace Application.Mapping
 {
@@ -31,7 +32,8 @@ namespace Application.Mapping
 
             CreateMap<Faults, FaultDto>().ReverseMap();
             CreateMap<IPaginatedList<Faults>, IPaginatedList<FaultDto>>().ReverseMap();
-
+            CreateMap<FaultForCreationDto, Faults>();
+            CreateMap<FaultForUpdatingStatusDto, Faults>();
 
         }
     }

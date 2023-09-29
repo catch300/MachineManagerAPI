@@ -1,5 +1,5 @@
 ﻿using Application.Abstraction;
-using Contracts;
+using Contracts.Machines;
 using Domain.Repositories;
 using Infrastructure.Repositories;
 using Microsoft.AspNetCore.Mvc;

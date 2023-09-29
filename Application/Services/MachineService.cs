@@ -1,6 +1,6 @@
 ﻿using Application.Abstraction;
 using AutoMapper;
-using Contracts;
+using Contracts.Machines;
 using Domain.Models;
 using Domain.Repositories;
 
