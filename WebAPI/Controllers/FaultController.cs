@@ -36,7 +36,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddMachine([FromBody] FaultForCreationDto fault)
+        public async Task<IActionResult> AddFault([FromBody] FaultForCreationDto fault)
         {
             try
             {
@@ -77,12 +77,12 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpDelete("{machineId}")]
-        public async Task<IActionResult> DeleteMachine(int machineId)
+        [HttpDelete("{faultId}")]
+        public async Task<IActionResult> DeleteFault(int faultId)
         {
             try
             {
-                await _faultsService.DeleteFaultAsync(machineId);
+                await _faultsService.DeleteFaultAsync(faultId);
                 return NoContent();
             }
             catch (InvalidOperationException ex)
