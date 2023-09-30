@@ -103,7 +103,7 @@ namespace Infrastructure.Repositories
             parameters.Add("Description", fault.Description);
             parameters.Add("IsResolved", fault.IsResolved);
             parameters.Add("MachineId", fault.MachineId);
-            parameters.Add("Priority", fault.EndTime);
+            parameters.Add("Priority", fault.Priority);
 
             using (var connection = _dbContext.CreateConnection())
             {
@@ -132,7 +132,8 @@ namespace Infrastructure.Repositories
             parameters.Add("Description", fault.Description);
             parameters.Add("IsResolved", fault.IsResolved);
             parameters.Add("MachineId", fault.MachineId);
-            parameters.Add("Priority", fault.EndTime);
+            parameters.Add("Priority", fault.Priority);
+            parameters.Add("FaultId", faultId);
 
             using (var connection = _dbContext.CreateConnection())
             {

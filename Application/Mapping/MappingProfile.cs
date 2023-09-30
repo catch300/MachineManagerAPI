@@ -33,7 +33,8 @@ namespace Application.Mapping
             CreateMap<Faults, FaultDto>().ReverseMap();
             CreateMap<IPaginatedList<Faults>, IPaginatedList<FaultDto>>().ReverseMap();
             CreateMap<FaultForCreationDto, Faults>();
-            CreateMap<FaultForUpdatingStatusDto, Faults>();
+            CreateMap<FaultForUpdatingDto, Faults>().ReverseMap();
+            CreateMap<FaultForUpdatingStatusDto, Faults>().ReverseMap();
 
         }
     }

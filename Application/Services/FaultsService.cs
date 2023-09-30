@@ -25,7 +25,6 @@ namespace Application.Services
 
             int maxPageSize = 10;
             pageSize = pageSize < maxPageSize ? pageSize : maxPageSize;
-            //pageSize = pageSize < 1 ? totalNumOfFaults : pageSize;
 
             int offset = (currentPageNumber - 1) * pageSize;
 
