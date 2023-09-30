@@ -20,10 +20,14 @@ namespace WebApi.Controllers
         [HttpGet]
         public async Task<IActionResult> GetFaults(int currentPageNumber, int pageSize)
         {
-            var malfunctions = await _faultsService.GetAllFaultsAsync(currentPageNumber, pageSize);
-            if (malfunctions == null) return NotFound();
-            
-            return Ok(malfunctions);
+            var faults = await _faultsService.GetAllFaultsAsync(currentPageNumber, pageSize);
+            if (faults == null) return NotFound();
+
+            if (currentPageNumber > faults.TotalPages)
+            {
+                return NoContent();
+            }
+            return Ok(faults);
         }
 
         [HttpGet("{faultId}")]

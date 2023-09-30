@@ -51,8 +51,8 @@ namespace Infrastructure.Repositories
                             ""StartTime"" DESC 
                             OFFSET @Offset ROWS
                             FETCH NEXT @Limit ROWS ONLY";
-//                        OFFSET @Offset ROWS
-//                        LIMIT @Limit";
+            //                        OFFSET @Offset ROWS
+            //                        LIMIT @Limit";
 
             using (var connection = _dbContext.CreateConnection())
             {
